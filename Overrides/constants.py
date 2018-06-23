@@ -1,5 +1,6 @@
 import re
 
+DEFAULT_CFG_FILE_NAME = "default_config.ini"
 CFG_FILE_NAME = "config.ini"
 CFG_SECTION = "XCOM2OverridesManager"
 LOG_FILE_NAME = "XCOM2OM.log"

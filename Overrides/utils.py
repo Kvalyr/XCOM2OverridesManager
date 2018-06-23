@@ -1,9 +1,15 @@
+import configparser
 import datetime
 import os
 import platform
 import sys
 
-from Overrides.constants import LOG_FILE_NAME, MAX_LOG_SIZE
+from Overrides.constants import DEFAULT_CFG_FILE_NAME, CFG_FILE_NAME, LOG_FILE_NAME, MAX_LOG_SIZE
+
+CFG_DEFAULT_WOTC = 'True'
+CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
+CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods'
+CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500'
 
 
 class SplitOut(object):
@@ -33,6 +39,26 @@ def setup_logging():
 	log_file = open(LOG_FILE_NAME, file_mode)
 	sys.stdout = SplitOut(log_file, sys.stdout)
 	print("-- XCOM2OverridesManager -- %s" % datetime.datetime.now())
+
+
+def load_manager_config():
+	# Load config for this script
+	manager_config = configparser.ConfigParser()
+	manager_config['DEFAULT'] = {
+		'WOTC': CFG_DEFAULT_WOTC,
+		'XCOM2Mods': CFG_DEFAULT_XCOM2Mods,
+		'WOTCMods': CFG_DEFAULT_WOTCMods,
+		'SteamMods': CFG_DEFAULT_SteamMods,
+	}
+
+	if not manager_config.read(CFG_FILE_NAME):
+		print(
+			"config.ini missing! Should be in same folder as this program. Current working dir: %s"  % os.getcwd()
+			# "\n\nPress enter to continue." % os.getcwd()
+		)
+		# input("")
+
+	return manager_config
 
 
 def get_platform_specific_xce_path(wotc=True):

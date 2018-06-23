@@ -1,33 +1,18 @@
-import configparser
-import platform
 import os
 import re
 import shutil
-import sys
 
 from Overrides import ModClassOverride
-from Overrides.constants import CFG_FILE_NAME, CFG_SECTION, re_mco_add, re_mco_ml
-from Overrides.utils import get_platform_specific_xce_path, setup_logging
+from Overrides.constants import DEFAULT_CFG_FILE_NAME, CFG_FILE_NAME, CFG_SECTION, re_mco_add, re_mco_ml
+from Overrides.utils import get_platform_specific_xce_path, setup_logging, load_manager_config
 
 
 setup_logging()
+manager_config = load_manager_config()
 
-
-# Load config for this script
-manager_config = configparser.ConfigParser()
-if not manager_config.read(CFG_FILE_NAME):
-	print(
-		"Config.ini missing! Should be in same folder as this program. Current working dir: %s\n\nPress enter to quit."
-		% os.getcwd()
-	)
-	input("")
-	sys.exit(1)
 IS_WOTC = manager_config.getboolean(CFG_SECTION, "WOTC")
-
 XCE_FILE_NAME = "XComEngine.ini"
 XCE_FILE_NAME_BAK = XCE_FILE_NAME+".bak"
-
-
 XCOM2_CONF_PATH = get_platform_specific_xce_path(wotc=IS_WOTC)
 XCE_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME
 XCE_FILE_PATH_BAK = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME_BAK
@@ -56,14 +41,8 @@ MOD_PATHS = [
 if IS_WOTC:
 	MOD_PATHS.append(Path_WOTCMods)
 
-# class IniFileProcessor(object):
-
 
 def get_overrides_from_file(file_path):
-	"""
-	if not file_has_overrides(file_path):
-		return []
-	"""
 	# print("==== Getting overrides from file: %s" % file_path)
 	overrides = []
 	with open(file_path, "r") as file:
@@ -116,6 +95,7 @@ def get_existing_overrides(text):
 def replace_old_overrides(text, repl=""):
 	repl = repl + "\n\n[" if repl else "\n["
 	return re.sub(re_mco_ml, repl, text)
+
 
 overrides_dict = {}
 found_overrides = []
