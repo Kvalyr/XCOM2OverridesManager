@@ -1,0 +1,9 @@
+venv/
+.idea/
+__pycache__
+XCOM2OM.log
+XComEngine.ini
+XComEngine.ini.bak
+dist/
+build/
+*.spec
