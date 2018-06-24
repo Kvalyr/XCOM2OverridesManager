@@ -54,7 +54,6 @@ Path_XCOM2Mods = inicfg[CFG_SECTION]["XCOM2Mods"]
 Path_WOTCMods = inicfg[CFG_SECTION]["WOTCMods"]
 Path_SteamMods = inicfg[CFG_SECTION]["SteamMods"]
 
-
 # TODO: Read these paths from XCE?
 """
     [Engine.DownloadableContentEnumerator]
@@ -80,4 +79,3 @@ PromptForEach = inicfg.getboolean("Overrides", "PromptForEach", fallback=True)
 CleanActiveMods = inicfg.getboolean("ModOptions", "CleanActiveMods", fallback=True)
 CleanXComModOptions = inicfg.getboolean("ModOptions", "CleanXComModOptions", fallback=True)
 CleanDefaultModOptions = inicfg.getboolean("ModOptions", "CleanDefaultModOptions", fallback=True)
-
