@@ -1,10 +1,9 @@
 import configparser
 import datetime
 import os
-import platform
 import sys
 
-from Overrides.constants import DEFAULT_CFG_FILE_NAME, CFG_FILE_NAME, LOG_FILE_NAME, MAX_LOG_SIZE
+from Overrides.constants import CFG_FILE_NAME, LOG_FILE_NAME, MAX_LOG_SIZE
 
 CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
@@ -52,32 +51,6 @@ def load_manager_config():
 	}
 
 	if not manager_config.read(CFG_FILE_NAME):
-		print(
-			"config.ini missing! Should be in same folder as this program. Current working dir: %s"  % os.getcwd()
-			# "\n\nPress enter to continue." % os.getcwd()
-		)
-		# input("")
+		print("config.ini missing! Should be in same folder as this program. Current working dir: %s" % os.getcwd())
 
 	return manager_config
-
-
-def get_platform_specific_xce_path(wotc=True):
-	if platform.system() == "Windows":
-		path = "\Documents\my games\XCOM2\XComGame\Config\\"
-		if wotc:
-			path = "\Documents\my games\XCOM2 War of the Chosen\XComGame\Config\\"
-
-	elif platform.system() == "Darwin":
-		# TODO: Uncertain about these paths
-		path = "/Library/Application Support/Feral Interactive/XCOM 2/VFS/Local/my games/XCOM2/XCOMGame/Config/"
-		if wotc:
-			path = "/Library/Application Support/Feral Interactive/XCOM 2 WotC/VFS/Local/my games/XCOM2 War of the Chosen/XCOMGame/Config/"
-
-	elif platform.system() == "Linux":
-		# TODO: Uncertain about these paths
-		path = ".local/share/feral-interactive/XCOM2/VFS/Local/my games/XCOM2/XComGame/SaveData/"
-		if wotc:
-			path = ".local/share/feral-interactive/XCOM 2 WotC/VFS/Local/my games/XCOM2 War of the Chosen/XComGame/SaveData/"
-	else:
-		raise NotImplementedError("Unrecognized system OS/Platform")
-	return path
