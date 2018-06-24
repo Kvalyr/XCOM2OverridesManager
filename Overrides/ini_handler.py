@@ -1,8 +1,8 @@
 import platform
 import re
 
-from Overrides import ModClassOverride
 from Overrides.constants import re_mco_add
+from Overrides.mco import ModClassOverride
 
 
 class XComEngineIniHandler(object):

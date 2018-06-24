@@ -1,8 +1,9 @@
 import os
 import shutil
 
-from Overrides import XComEngineIniHandler, IniTextProcessor
 from Overrides.constants import CFG_SECTION
+from Overrides.ini_handler import XComEngineIniHandler, XComModOptionsIniHandler
+from Overrides.text_processor import IniTextProcessor
 from Overrides.utils import setup_logging, load_manager_config
 
 
