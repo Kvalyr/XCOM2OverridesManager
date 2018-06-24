@@ -1,5 +1,4 @@
 import os
-import shutil
 
 from Overrides.constants import CFG_SECTION
 from Overrides.ini_handler import XComEngineIniHandler, XComModOptionsIniHandler
@@ -13,17 +12,14 @@ manager_config = load_manager_config()
 IS_WOTC = manager_config.getboolean(CFG_SECTION, "WOTC")
 CLEAN_ACTIVE_MODS = manager_config.getboolean(CFG_SECTION, "CleanActiveMods")
 DRY_RUN = manager_config.getboolean(CFG_SECTION, "DryRun")
+
 XCE_FILE_NAME = "XComEngine.ini"
-XCE_FILE_NAME_BAK = XCE_FILE_NAME+".bak"
 XCMO_FILE_NAME = "XComModOptions.ini"
 
 XCOM2_CONF_PATH = XComEngineIniHandler.get_platform_specific_config_path(wotc=IS_WOTC)
 
 XCE_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME
-XCE_FILE_PATH_BAK = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME_BAK
 XCMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCMO_FILE_NAME
-
-
 
 
 # TODO: Read these paths from XCE?
