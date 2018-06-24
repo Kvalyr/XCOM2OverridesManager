@@ -18,7 +18,7 @@ class ModClassOverride(object):
 		return cls(base_class, mod_class, source_file)
 
 	def __repr__(self):
-		return "+ModClassOverrides=(" + "BaseGameClass=\"%s\", ModClass=\"%s\")" % (self.base_class, self.mod_class)
+		return "ModClassOverrides=(" + "BaseGameClass=\"%s\", ModClass=\"%s\")" % (self.base_class, self.mod_class)
 
 	def __eq__(self, other):
 		if not isinstance(other, ModClassOverride):
