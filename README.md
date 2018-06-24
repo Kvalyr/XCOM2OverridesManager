@@ -56,7 +56,7 @@ Released under MIT Licence
 # Links
 * [Latest Release](https://github.com/Kvalyr/XCOM2OverridesManager/releases/latest)
 * [XCOM2 Community Launcher](https://github.com/X2CommunityCore/xcom2-launcher) (Unaffiliated, but recommended)
-* [Discussion Thread (Reddit)](TODO) (TODO)
+* [Discussion Thread (Reddit)](https://www.reddit.com/r/xcom2mods/comments/8tg2rd/tool_xcom2_modclassoverrides_manager/)
 
 # Credit
 * XCOM2 and WotC are Properties of Firaxis
