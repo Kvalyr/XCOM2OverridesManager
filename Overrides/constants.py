@@ -1,8 +1,9 @@
 import re
 
-CFG_FILE_NAME = "config.ini"
-CFG_SECTION = "XCOM2OverridesManager"
 LOG_FILE_NAME = "XCOM2OM.log"
+
+XCE_FILE_NAME = "XComEngine.ini"
+XCMO_FILE_NAME = "XComModOptions.ini"
 
 # ENGINE_SECTION_NAME = "XComGame.XComEngine"
 # MCO = "ModClassOverrides"
