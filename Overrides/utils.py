@@ -3,7 +3,7 @@ import datetime
 import os
 import sys
 
-from Overrides.constants import CFG_FILE_NAME, LOG_FILE_NAME, MAX_LOG_SIZE
+from Overrides.constants import CFG_SECTION, CFG_FILE_NAME, LOG_FILE_NAME, MAX_LOG_SIZE
 
 CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
@@ -49,6 +49,7 @@ def load_manager_config():
 		'WOTCMods': CFG_DEFAULT_WOTCMods,
 		'SteamMods': CFG_DEFAULT_SteamMods,
 	}
+	manager_config[CFG_SECTION] = {}
 
 	if not manager_config.read(CFG_FILE_NAME):
 		print("config.ini missing! Should be in same folder as this program. Current working dir: %s" % os.getcwd())
