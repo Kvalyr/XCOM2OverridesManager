@@ -12,6 +12,7 @@ manager_config = load_manager_config()
 
 IS_WOTC = manager_config.getboolean(CFG_SECTION, "WOTC")
 CLEAN_ACTIVE_MODS = manager_config.getboolean(CFG_SECTION, "CleanActiveMods")
+DRY_RUN = manager_config.getboolean(CFG_SECTION, "DryRun")
 XCE_FILE_NAME = "XComEngine.ini"
 XCE_FILE_NAME_BAK = XCE_FILE_NAME+".bak"
 XCMO_FILE_NAME = "XComModOptions.ini"
@@ -49,6 +50,8 @@ print(":: WOTC: %s " % IS_WOTC)
 print(":: Path_XCOM2Mods: %s " % Path_XCOM2Mods)
 print(":: Path_WOTCMods: %s " % Path_WOTCMods)
 print(":: Path_SteamMods: %s " % Path_SteamMods)
+print(":: CleanActiveMods: %s " % CLEAN_ACTIVE_MODS)
+print(":: DryRun: %s " % DRY_RUN)
 
 
 class OverridesManager(object):
@@ -170,14 +173,14 @@ class OverridesManager(object):
 			print("== Doing cleanup of 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
 			clean_text = IniTextProcessor.repair_config_text(clean_text)
 
-			self.xce.write_text(clean_text)
+			self.xce.write_text(clean_text, dry_run=DRY_RUN)
 
 		else:
 			print("==== No Changes needed - Not modifying XComEngine.ini!")
 
 		if CLEAN_ACTIVE_MODS:
 			print("== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
-			self.xcmo.repair_active_mods()
+			self.xcmo.repair_active_mods(dry_run=DRY_RUN)
 
 		input(
 			"\n\nFinished! Open XCOM2OM.log in a text editor to see detailed results of what was done.\n"

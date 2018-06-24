@@ -18,16 +18,30 @@ class BaseIniHandler(object):
 		with open(self.file_path, "r") as input_file:
 			return input_file.readlines()
 
-	def write_text(self, new_text):
-		self.backup()
-		print("== Writing changes to ini file in user config folder: '%s'" % self.file_path)
-		with open(self.file_path, "w") as output_file:
-			return output_file.write(new_text)
+	def write_text(self, new_text, dry_run=False):
+		self.backup(dry_run=dry_run)
+		if dry_run:
+			print(
+				"== Would write changes but dry_run mode is enabled. "
+				"Set DryRun = False in config.ini to allow writing changes."
+				"\nFile: %s\n" % self.file_path
+			)
+		else:
+			with open(self.file_path, "w") as output_file:
+				print("== Writing changes to ini file in user config folder: '%s'" % self.file_path)
+				return output_file.write(new_text)
 
-	def backup(self):
+	def backup(self, dry_run=False):
 		bak_path = self.file_path + ".bak"
-		print("== Backing up existing '%s' to '%s'" % (self.file_path, bak_path))
-		shutil.copy(self.file_path, bak_path)
+		if dry_run:
+			print(
+				"== Would backup file but dry_run mode is enabled. "
+				"Set DryRun = False in config.ini to allow writing changes."
+				"\nFile: %s\n" % bak_path
+			)
+		else:
+			print("== Backing up existing '%s' to '%s'" % (self.file_path, bak_path))
+			shutil.copy(self.file_path, bak_path)
 
 	@classmethod
 	def get_platform_specific_config_path(cls, wotc=True):
@@ -90,7 +104,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
 			self.active_mods.append(parts[1])
 		self.active_mods = list(set(self.active_mods))
 
-	def repair_active_mods(self):
+	def repair_active_mods(self, dry_run=False):
 		re_xmo = re.compile(r'\[Engine.XComModOptions\][\s\S]*\[', flags=re.MULTILINE)
 		config_text = self.get_text()
 		mod_lines = []
@@ -102,7 +116,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
 		repl = "[Engine.XComModOptions]\n" + mods_text + "\n\n["
 		config_text = re.sub(re_xmo, repl, config_text)
 
-		self.write_text(config_text)
+		self.write_text(config_text, dry_run=dry_run)
 
 
 class XComEngineIniHandler(BaseIniHandler):

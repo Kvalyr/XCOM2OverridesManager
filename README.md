@@ -36,6 +36,7 @@ This tool is intended to be paired with the community launcher, but can be used 
     * *(Google "XCOM 2 Mod paths" if you get stuck.)*
   * Change `WOTC` to `False` in `config.ini` if you are playing vanilla XCOM2 without WotC.
   * Change `CleanActiveMods` to `False` in `config.ini` if you don't want the tool clean up duplicate entries in XComModOptions.ini
+  * Change `DryRun` to `True` in `config.ini` if you want to run the tool and observe it **would** do without making any file changes.
 
 * Run the tool. It will work automatically without any further prompts.
 * A backup of any file modified by this tool will be copied to `[file name].bak` in the same folder.
