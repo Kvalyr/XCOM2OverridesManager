@@ -32,6 +32,7 @@ inicfg['DEFAULT'] = {
     'SteamMods': CFG_DEFAULT_SteamMods,
 }
 """
+# TODO Do we need to set DEFAULT at all? 'fallback' kwarg probably covers it.
 'CleanOverrides': CFG_DEFAULT_CleanOverrides,
 'PromptForEach': CFG_DEFAULT_PromptForEachOverride,
 'IncludeOverrides': CFG_DEFAULT_IncludeOverrides,
