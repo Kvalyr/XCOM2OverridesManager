@@ -11,6 +11,7 @@ setup_logging()
 manager_config = load_manager_config()
 
 IS_WOTC = manager_config.getboolean(CFG_SECTION, "WOTC")
+CLEAN_ACTIVE_MODS = manager_config.getboolean(CFG_SECTION, "CleanActiveMods")
 XCE_FILE_NAME = "XComEngine.ini"
 XCE_FILE_NAME_BAK = XCE_FILE_NAME+".bak"
 XCMO_FILE_NAME = "XComModOptions.ini"
@@ -147,15 +148,9 @@ class OverridesManager(object):
 
 		return change_needed
 
-	@classmethod
-	def _backup_existing_config(cls):
-		print("== Backing up existing '%s' to '%s'" % (XCE_FILE_NAME, XCE_FILE_PATH_BAK))
-		shutil.copy(XCE_FILE_PATH, XCE_FILE_PATH_BAK)
-
 	def process_overrides_and_write_config(self):
 		if self._determine_if_changes_needed():
 			print("==== Changes needed - Proceeding")
-			self._backup_existing_config()
 
 			print("== Updating overrides in 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
 			text = self.xce.get_text()
@@ -168,10 +163,14 @@ class OverridesManager(object):
 			print("== Doing cleanup of 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
 			clean_text = IniTextProcessor.repair_config_text(clean_text)
 
-			print("== Writing changes to 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
-			self.xce.write_xce_text(clean_text)
+			self.xce.write_text(clean_text)
+
 		else:
 			print("==== No Changes needed - Not modifying XComEngine.ini!")
+
+		if CLEAN_ACTIVE_MODS:
+			print("== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
+			self.xcmo.repair_active_mods()
 
 		input("\n\nFinished! Press Enter to close this window...\n")
 

@@ -9,6 +9,7 @@ CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
 CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods'
 CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500'
+CFG_DEFAULT_CleanActive = 'False'
 
 
 class SplitOut(object):
@@ -48,6 +49,7 @@ def load_manager_config():
 		'XCOM2Mods': CFG_DEFAULT_XCOM2Mods,
 		'WOTCMods': CFG_DEFAULT_WOTCMods,
 		'SteamMods': CFG_DEFAULT_SteamMods,
+		'CleanActiveMods': CFG_DEFAULT_CleanActive,
 	}
 	manager_config[CFG_SECTION] = {}
 

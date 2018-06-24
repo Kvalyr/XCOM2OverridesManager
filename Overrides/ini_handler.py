@@ -1,5 +1,6 @@
 import platform
 import re
+import shutil
 
 from Overrides.constants import re_mco_add
 from Overrides.mco import ModClassOverride
@@ -17,9 +18,16 @@ class BaseIniHandler(object):
 		with open(self.file_path, "r") as input_file:
 			return input_file.readlines()
 
-	def write_xce_text(self, new_text):
+	def write_text(self, new_text):
+		self.backup()
+		print("== Writing changes to ini file in user config folder: '%s'" % self.file_path)
 		with open(self.file_path, "w") as output_file:
 			return output_file.write(new_text)
+
+	def backup(self):
+		bak_path = self.file_path + ".bak"
+		print("== Backing up existing '%s' to '%s'" % (self.file_path, bak_path))
+		shutil.copy(self.file_path, bak_path)
 
 	@classmethod
 	def get_platform_specific_config_path(cls, wotc=True):
@@ -80,6 +88,21 @@ class XComModOptionsIniHandler(BaseIniHandler):
 			if len(parts) < 2:
 				raise ValueError("Invalid XComModOptions.ini! Problem on line %s : %s" % (line_counter, line))
 			self.active_mods.append(parts[1])
+		self.active_mods = list(set(self.active_mods))
+
+	def repair_active_mods(self):
+		re_xmo = re.compile(r'\[Engine.XComModOptions\][\s\S]*\[', flags=re.MULTILINE)
+		config_text = self.get_text()
+		mod_lines = []
+
+		for mod in self.active_mods:
+			mod_lines.append("ActiveMods=%s" % mod)
+
+		mods_text = '\n'.join(mod_lines)
+		repl = "[Engine.XComModOptions]\n" + mods_text + "\n\n["
+		config_text = re.sub(re_xmo, repl, config_text)
+
+		self.write_text(config_text)
 
 
 class XComEngineIniHandler(BaseIniHandler):
