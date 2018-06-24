@@ -26,8 +26,7 @@ This tool is intended to be paired with the community launcher, but can be used 
 * Warn about duplicate & conflicting overrides
 
 # Known Issues / Limitations
-* Currently enables overrides for **any/all** mods found - Not just those enabled in XComModOptions.ini 
-  * A fix is underway. Users who only install/subscribe to mods they actually want to enable can use this tool without problem.
+* Nothing currently
 
 # How to Use
 * Download this tool and extract it somewhere convenient.

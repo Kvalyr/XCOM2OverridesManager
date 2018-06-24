@@ -13,9 +13,14 @@ manager_config = load_manager_config()
 IS_WOTC = manager_config.getboolean(CFG_SECTION, "WOTC")
 XCE_FILE_NAME = "XComEngine.ini"
 XCE_FILE_NAME_BAK = XCE_FILE_NAME+".bak"
-XCOM2_CONF_PATH = XComEngineIniHandler.get_platform_specific_xce_path(wotc=IS_WOTC)
+XCMO_FILE_NAME = "XComModOptions.ini"
+
+XCOM2_CONF_PATH = XComEngineIniHandler.get_platform_specific_config_path(wotc=IS_WOTC)
+
 XCE_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME
 XCE_FILE_PATH_BAK = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME_BAK
+XCMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCMO_FILE_NAME
+
 
 print("Debug: XComEngine.ini absolute path: '%s'" % XCE_FILE_PATH)
 
@@ -40,6 +45,7 @@ if IS_WOTC:
 
 class OverridesManager(object):
 	xce = XComEngineIniHandler(XCE_FILE_PATH)
+	xcmo = XComModOptionsIniHandler(XCMO_FILE_PATH)
 	overrides_dict = {}
 	found_overrides = []
 	previous_overrides = []
@@ -71,7 +77,7 @@ class OverridesManager(object):
 			"Retrieving existing overrides from 'XComEngine.ini' in user config folder ('%s') for comparison."
 			% XCE_FILE_PATH
 		)
-		self.previous_overrides = self.xce.get_overrides_from_file(self.xce.xce_path)
+		self.previous_overrides = self.xce.get_overrides_from_file(self.xce.file_path)
 		print("Previous Overrides in XComEngine.ini: %s" % len(self.previous_overrides))
 
 	def _find_overrides_in_mods_paths(self):
@@ -81,8 +87,12 @@ class OverridesManager(object):
 
 				# Get ModClassOverride lines in found files
 				overs = XComEngineIniHandler.get_overrides_from_file(ini_path)
-				if overs:
-					self.found_overrides.extend(overs)
+				for found_override in overs:
+					source_mod_name = found_override.source_mod_name
+					if source_mod_name is not None and source_mod_name in self.xcmo.active_mods:
+						self.found_overrides.append(found_override)
+					else:
+						print("Ignoring override from inactive Mod: %s" % source_mod_name)
 
 	def _check_for_duplicate_overrides(self):
 		# Parse the ModClassOverride lines so we can warn about duplicates
@@ -113,7 +123,6 @@ class OverridesManager(object):
 	def _determine_overrides_to_add(self):
 		new_overrides = self.found_overrides.copy()
 		if self.previous_overrides:
-			print("Previous Overrides in XComEngine.ini: %s" % len(self.previous_overrides))
 			new_overrides = list(set(self.found_overrides) - set(self.previous_overrides))
 		return new_overrides
 
