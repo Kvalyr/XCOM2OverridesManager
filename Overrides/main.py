@@ -23,7 +23,7 @@ XCE_FILE_PATH_BAK = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME_BA
 XCMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCMO_FILE_NAME
 
 
-print("Debug: XComEngine.ini absolute path: '%s'" % XCE_FILE_PATH)
+
 
 # TODO: Read these paths from XCE?
 """
@@ -42,6 +42,13 @@ MOD_PATHS = [
 ]
 if IS_WOTC:
 	MOD_PATHS.append(Path_WOTCMods)
+
+print("Debug: XComEngine.ini absolute path: '%s'" % XCE_FILE_PATH)
+print("Configuration: ")
+print(":: WOTC: %s " % IS_WOTC)
+print(":: Path_XCOM2Mods: %s " % Path_XCOM2Mods)
+print(":: Path_WOTCMods: %s " % Path_WOTCMods)
+print(":: Path_SteamMods: %s " % Path_SteamMods)
 
 
 class OverridesManager(object):
@@ -172,7 +179,10 @@ class OverridesManager(object):
 			print("== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
 			self.xcmo.repair_active_mods()
 
-		input("\n\nFinished! Press Enter to close this window...\n")
+		input(
+			"\n\nFinished! Open XCOM2OM.log in a text editor to see detailed results of what was done.\n"
+			"\nPress Enter to close this window...\n"
+		)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 # XCOM2OverridesManager
-### A tool that cleans & updates XCOM2 ModClassOverride entries in XComEngine.ini in the user's config path.
+### A tool that cleans & updates XCOM2 `ModClassOverride` entries in `XComEngine.ini` in the user's config path.
 
 The tool is distributed as a standalone executable for Windows, or it can can be run via python on any platform.
 
@@ -19,9 +19,9 @@ This tool is intended to be paired with the community launcher, but can be used 
 
 
 # What does it do?
-* Scans your XCOM2 / WotC / Workshop mods for ModClassOverrides
-* Checks existing ModClassOverrides in your XComEngine.ini
-* Removes outdated overrides
+* Scans your installed XCOM2 / WotC / Workshop mods for ModClassOverrides
+* Checks existing `ModClassOverrides` in your `XComEngine.ini`
+* Removes outdated overrides (ie; from mods that have been removed or deactivated)
 * Adds missing overrides
 * Warn about duplicate & conflicting overrides
 
@@ -30,13 +30,16 @@ This tool is intended to be paired with the community launcher, but can be used 
 
 # How to Use
 * Download this tool and extract it somewhere convenient.
-* Open the `config.ini` file in the tool's folder and set the Mod paths to match your XCOM2 mod paths.
-  * On Windows you will typically only need to change the Drive letter and base steam folder location.
-  * Google "XCOM 2 Mod paths" if you get stuck.
-* Change `WOTC` to false in `config.ini` if you are playing vanilla XCOM2 without WotC.
+* Configuration:
+  * Open the `config.ini` file in the tool's folder and set the Mod paths to match your XCOM2 mod paths.
+    * *On Windows you will typically only need to change the Drive letter and base steam folder location.*
+    * *(Google "XCOM 2 Mod paths" if you get stuck.)*
+  * Change `WOTC` to `False` in `config.ini` if you are playing vanilla XCOM2 without WotC.
+  * Change `CleanActiveMods` to `False` in `config.ini` if you don't want the tool clean up duplicate entries in XComModOptions.ini
+
 * Run the tool. It will work automatically without any further prompts.
-* A backup of your previous XComEngine.ini will be copied to XComEngine.ini.bak in the same folder.
-* If the tool window just disappears immediately or otherwise fails to work, take a look at the XCOM2OM.log file it generates in its own folder. The tool logs what it's doing there, along with possible errors or problems encountered.
+* A backup of any file modified by this tool will be copied to `[file name].bak` in the same folder.
+* If the tool window just disappears immediately or otherwise fails to work, take a look at the `XCOM2OM.log` file it generates in its own folder. The tool logs what it's doing there, along with possible errors or problems encountered.
 
 # Building an Executable 
 ### For users on Linux/Mac or those who prefer not to download precompiled binaries
