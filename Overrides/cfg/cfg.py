@@ -10,6 +10,7 @@ CFG_DEFAULT_UI = 'False'
 CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_DryRun = 'False'
 
+CFG_DEFAULT_XCOM2Dir = 'C:\Program Files\Steam\steamapps\common\XCOM 2\\'
 CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
 CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods'
 CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500'
@@ -45,14 +46,6 @@ def _parse_overrides_filter(string_from_ini):
 
 # Load config for this script
 inicfg = configparser.ConfigParser()
-inicfg['DEFAULT'] = {  # This probably isn't necessary due to 'fallback='
-    'WOTC': CFG_DEFAULT_WOTC,
-    'DryRun': CFG_DEFAULT_DryRun,
-    'XCOM2Mods': CFG_DEFAULT_XCOM2Mods,
-    'WOTCMods': CFG_DEFAULT_WOTCMods,
-    'SteamMods': CFG_DEFAULT_SteamMods,
-}
-
 inicfg[CFG_SECTION] = {}
 
 if not inicfg.read(CFG_FILE_NAME):
@@ -62,9 +55,10 @@ UseUI = inicfg.getboolean(CFG_SECTION, "UseUI", fallback=CFG_DEFAULT_WOTC)
 WOTC = inicfg.getboolean(CFG_SECTION, "WOTC", fallback=CFG_DEFAULT_WOTC)
 DryRun = inicfg.getboolean(CFG_SECTION, "DryRun", fallback=CFG_DEFAULT_DryRun)
 
-Path_XCOM2Mods = inicfg[CFG_SECTION]["XCOM2Mods"]
-Path_WOTCMods = inicfg[CFG_SECTION]["WOTCMods"]
-Path_SteamMods = inicfg[CFG_SECTION]["SteamMods"]
+XCOM2Dir = inicfg.get(CFG_SECTION, "XCOM2Dir", fallback=CFG_DEFAULT_XCOM2Dir)
+Path_XCOM2Mods = inicfg.get(CFG_SECTION, "XCOM2Mods", fallback=CFG_DEFAULT_XCOM2Mods)
+Path_WOTCMods = inicfg.get(CFG_SECTION, "WOTCMods", fallback=CFG_DEFAULT_WOTCMods)
+Path_SteamMods = inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods)
 
 # TODO: Read these paths from XCE?
 """
@@ -79,6 +73,7 @@ mod_paths = dict(
     # AdditionalModsPath1, AdditionalModsPath2, AdditionalModsPath2, AdditionalModsPath3, AdditionalModsPath4
 )
 if WOTC:
+    XCOM2Dir += "XCom2-WarOfTheChosen\\"
     mod_paths["WOTCMods"] = Path_WOTCMods
 
 

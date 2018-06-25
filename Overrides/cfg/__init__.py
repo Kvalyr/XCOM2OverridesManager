@@ -7,6 +7,7 @@ from .cfg import CleanOverrides
 from .cfg import PromptForEach
 from .cfg import IncludeOverrides, ExcludeOverrides
 from .cfg import CleanActiveMods, CleanXComModOptions, CleanDefaultModOptions
+from .cfg import XCOM2Dir
 from .cfg import mod_paths
 
 __all__ = [
@@ -22,4 +23,6 @@ __all__ = [
     'CleanActiveMods',
     'CleanXComModOptions',
     'CleanDefaultModOptions',
+    'XCOM2Dir',
+    'mod_paths',
 ]
