@@ -73,19 +73,53 @@ class OverridesManager(object):
         self.previous_overrides = self.xce.get_overrides_from_file(self.xce.file_path)
         print("Previous Overrides in XComEngine.ini: %s" % len(self.previous_overrides))
 
+    def _should_add_override(self, override):
+        source_mod_name = override.source_mod_name
+
+        print(self.xcmo.active_mods)
+
+        # Check Include/Exclude Mods
+        if source_mod_name is None or source_mod_name not in self.xcmo.active_mods:
+            reason = "inactive" if source_mod_name not in cfg.ExcludeMods else "excluded"
+            print("Ignoring override from %s Mod: %s : %s" % (reason, source_mod_name, override))
+            return False
+
+        # Check Include/Exclude Overrides
+        if len(cfg.IncludeOverrides.keys()):  # If there are any IncludeOverrides, allow ONLY those overrides
+            includes = cfg.IncludeOverrides.get(override.base_class)
+            if not includes or override.mod_class not in includes:
+                print("Override not in IncludeOverrides %s" % override)
+                return False
+        else:
+            excludes = cfg.ExcludeOverrides.get(override.base_class)
+            if excludes and override.mod_class in excludes:
+                print("Excluding Override found in ExcludeOverrides %s" % override)
+                return False
+
+        if cfg.PromptForEach and not cfg.UseUI:
+            p = get_input(
+                "\nFound Override: %s : source_file=%s, mod_name=%s \n"
+                "Do you want to add this override? Y/n   "
+                "(Set 'PromptForEach' to False in config.ini to disable this prompt)  "
+                % (override, override.source_file, override.source_mod_name)
+            )
+            if p.upper() in ("N", "NO"):
+                print("Ignoring override due to answer (%s) at prompt: %s\n\n" % (p, override))
+                return False
+        return True
+
+    def _add_override(self, override):
+        if self._should_add_override(override):
+            self.found_overrides.append(override)
+
     def _find_overrides_in_mods_paths(self):
         # Get file paths to all XComEngine.ini files in known mod paths (XCOM2, WotC, Steam, + Additionals)
         for mod_path, path in cfg.mod_paths.items():
             for ini_path in self.find_inis_in_mods_path(path):
-
                 # Get ModClassOverride lines in found files
                 overs = XComEngineIniHandler.get_overrides_from_file(ini_path)
                 for found_override in overs:
-                    source_mod_name = found_override.source_mod_name
-                    if source_mod_name is not None and source_mod_name in self.xcmo.active_mods:
-                        self.found_overrides.append(found_override)
-                    else:
-                        print("Ignoring override from inactive Mod: %s" % source_mod_name)
+                    self._add_override(found_override)
 
     def _check_for_duplicate_overrides(self):
         # Parse the ModClassOverride lines so we can warn about duplicates
