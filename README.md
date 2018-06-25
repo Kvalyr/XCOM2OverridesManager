@@ -31,12 +31,14 @@ This tool is intended to be paired with the community launcher, but can be used 
 # How to Use
 * Download this tool and extract it somewhere convenient.
 * Configuration:
-  * Open the `config.ini` file in the tool's folder and set the Mod paths to match your XCOM2 mod paths.
+  * Open the `config.ini` file in the tool's folder and set the paths to match your XCOM2 paths.
     * *On Windows you will typically only need to change the Drive letter and base steam folder location.*
     * *(Google "XCOM 2 Mod paths" if you get stuck.)*
   * Change `WOTC` to `False` in `config.ini` if you are playing vanilla XCOM2 without WotC.
-  * Change `CleanActiveMods` to `False` in `config.ini` if you don't want the tool clean up duplicate entries in XComModOptions.ini
+  * Change `CleanActiveMods` to `False` in `config.ini` if you don't want the tool to clean up duplicate entries in XComModOptions.ini
+  * Change `CleanOVerrides` to `False` in `config.ini` if you don't want the tool to process ModClassOverrides in XComEngine.ini
   * Change `DryRun` to `True` in `config.ini` if you want to run the tool and observe it **would** do without making any file changes.
+  * See `config.ini` for more options.
 
 * Run the tool. It will work automatically without any further prompts.
 * A backup of any file modified by this tool will be copied to `[file name].bak` in the same folder.
