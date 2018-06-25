@@ -3,7 +3,7 @@
 
 The tool is distributed as a standalone executable for Windows, or it can can be run via python on any platform.
 
-[Download Latest Release Here](https://github.com/Kvalyr/XCOM2OverridesManager/releases/latest)
+[Download Latest Release Here](https://github.com/Kvalyr/XCOM2OverridesManager/releases/latest) (If you don't know what to click: Download the .zip)
 
 # Why is it needed?
 * It was created out of my frustration with XCOM2's inconsistent behaviour in how it updates ModClassOverrides entries in XComEngine.ini.
