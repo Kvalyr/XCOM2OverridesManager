@@ -1,9 +1,12 @@
 import configparser
 import os
+import re
+
 
 CFG_FILE_NAME = "config.ini"
 CFG_SECTION = "XCOM2OverridesManager"
 
+CFG_DEFAULT_UI = 'False'
 CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_DryRun = 'False'
 
@@ -11,42 +14,51 @@ CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame
 CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods'
 CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500'
 
-"""
-CFG_DEFAULT_CleanOverrides = 'True'
-CFG_DEFAULT_PromptForEachOverride = 'False'
-CFG_DEFAULT_IncludeOverrides = ''
-CFG_DEFAULT_ExcludeOverrides = ''
 
-CFG_DEFAULT_CleanActive = 'True'
-CFG_DEFAULT_CleanXComModOptions = 'True'
-CFG_DEFAULT_CleanDefaultModOptions = 'True'
-"""
+def _parse_list_from_ini_string(string_from_ini):
+    if not string_from_ini:
+        return []
+    return re.split("\,*\s*", string_from_ini)
+
+
+def _parse_overrides_filter(string_from_ini):
+    elems = dict()
+    if not string_from_ini:
+        return elems
+    override_strings = _parse_list_from_ini_string(string_from_ini)
+    for o in override_strings:
+        override_parts = re.split("::+?", o)
+        print("override_parts", override_parts)
+        if len(override_parts) < 2:
+            raise ValueError(
+                "Badly formatted override filter. " 
+                "Should be of form: 'BaseClass::ModClass', with multiple overrides separated by commas"
+            )
+
+        base_class = override_parts[0]
+        mod_class = override_parts[1]
+        base_class_list = elems.get(base_class, [])
+        base_class_list.append(mod_class)
+        elems[base_class] = base_class_list
+    return elems
+
 
 # Load config for this script
 inicfg = configparser.ConfigParser()
-inicfg['DEFAULT'] = {
+inicfg['DEFAULT'] = {  # This probably isn't necessary due to 'fallback='
     'WOTC': CFG_DEFAULT_WOTC,
     'DryRun': CFG_DEFAULT_DryRun,
     'XCOM2Mods': CFG_DEFAULT_XCOM2Mods,
     'WOTCMods': CFG_DEFAULT_WOTCMods,
     'SteamMods': CFG_DEFAULT_SteamMods,
 }
-"""
-# TODO Do we need to set DEFAULT at all? 'fallback' kwarg probably covers it.
-'CleanOverrides': CFG_DEFAULT_CleanOverrides,
-'PromptForEach': CFG_DEFAULT_PromptForEachOverride,
-'IncludeOverrides': CFG_DEFAULT_IncludeOverrides,
-'ExcludeOverrides': CFG_DEFAULT_ExcludeOverrides,
 
-'CleanActiveMods': CFG_DEFAULT_CleanActive,
-'XComModOptions': CFG_DEFAULT_CleanXComModOptions,
-'DefaultModOptions': CFG_DEFAULT_CleanDefaultModOptions,
-"""
 inicfg[CFG_SECTION] = {}
 
 if not inicfg.read(CFG_FILE_NAME):
     print("config.ini missing! Should be in same folder as this program. Current working dir: %s\n\n" % os.getcwd())
 
+UseUI = inicfg.getboolean(CFG_SECTION, "UseUI", fallback=CFG_DEFAULT_WOTC)
 WOTC = inicfg.getboolean(CFG_SECTION, "WOTC", fallback=CFG_DEFAULT_WOTC)
 DryRun = inicfg.getboolean(CFG_SECTION, "DryRun", fallback=CFG_DEFAULT_DryRun)
 
@@ -69,13 +81,21 @@ mod_paths = dict(
 if WOTC:
     mod_paths["WOTCMods"] = Path_WOTCMods
 
-# Config for cleaning XComEngine.ini / ModClassOverrides
-CleanOverrides = inicfg.getboolean("Overrides", "CleanOverrides", fallback=True)
-IncludeOverrides = inicfg.get("Overrides", "IncludeOverrides", fallback=[])
-ExcludeOverrides = inicfg.get("Overrides", "ExcludeOverrides", fallback=[])
-PromptForEach = inicfg.getboolean("Overrides", "PromptForEach", fallback=True)
 
 # Config for cleaning XComModOptions inis
+# IncludeMods is probably a bad idea given the potential for messy interactions with the Launchers
+# IncludeMods_str = inicfg.get("ModOptions", "IncludeMods", fallback=[])
+# IncludeMods = _parse_list_from_ini_string(IncludeMods_str)
+ExcludeMods_Str = inicfg.get("ModOptions", "ExcludeMods", fallback=[])
+ExcludeMods = _parse_list_from_ini_string(ExcludeMods_Str)
 CleanActiveMods = inicfg.getboolean("ModOptions", "CleanActiveMods", fallback=True)
 CleanXComModOptions = inicfg.getboolean("ModOptions", "CleanXComModOptions", fallback=True)
 CleanDefaultModOptions = inicfg.getboolean("ModOptions", "CleanDefaultModOptions", fallback=True)
+
+# Config for cleaning XComEngine.ini / ModClassOverrides
+CleanOverrides = inicfg.getboolean("Overrides", "CleanOverrides", fallback=True)
+IncludeOverrides_str = inicfg.get("Overrides", "IncludeOverrides", fallback=[])
+ExcludeOverrides_str = inicfg.get("Overrides", "ExcludeOverrides", fallback=[])
+PromptForEach = inicfg.getboolean("Overrides", "PromptForEach", fallback=True)
+IncludeOverrides = _parse_overrides_filter(IncludeOverrides_str)
+ExcludeOverrides = _parse_overrides_filter(ExcludeOverrides_str)
