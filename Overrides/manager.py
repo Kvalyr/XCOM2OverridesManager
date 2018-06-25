@@ -2,14 +2,14 @@ import os
 
 from Overrides import cfg
 from Overrides.constants import XCE_FILE_NAME, XCMO_FILE_NAME
-from Overrides.ini import XComEngineIniHandler, XComModOptionsIniHandler
+from Overrides.ini import XComEngineIniHandler, XComModOptionsIniHandler, DefaultModOptionsIniHandler
 from Overrides.text_processor import IniTextProcessor
 from Overrides.utils import get_input
 
+XCOM2_GAME_PATH = cfg.XCOM2Dir
 XCOM2_CONF_PATH = XComEngineIniHandler.get_platform_specific_config_path()
 XCE_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME
 XCMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCMO_FILE_NAME
-# DMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + DMO_FILE_NAME  # GameDir, not VFS
 
 # TODO Move this
 print("Debug: XComEngine.ini absolute path: '%s'" % XCE_FILE_PATH)
@@ -37,18 +37,19 @@ print(":: :: PromptForEach: %s" % cfg.PromptForEach)
 
 
 class OverridesManager(object):
+    dmo = DefaultModOptionsIniHandler()
     xcmo = XComModOptionsIniHandler(XCMO_FILE_PATH)
-    # dmo = XComModOptionsIniHandler(DMO_FILE_PATH)
     xce = XComEngineIniHandler(XCE_FILE_PATH)
     overrides_dict = {}
     found_overrides = []
     previous_overrides = []
 
     def __init__(self):
-        self._find_overrides_in_mods_paths()
-        self._check_for_duplicate_overrides()
-        print("Found and Parsed ModClassOverrides: %s" % len(self.found_overrides))
-        self._get_existing_overrides()
+        if cfg.CleanOverrides:
+            self._find_overrides_in_mods_paths()
+            self._check_for_duplicate_overrides()
+            print("Found and Parsed ModClassOverrides: %s" % len(self.found_overrides))
+            self._get_existing_overrides()
 
     @classmethod
     def find_inis_in_mods_path(cls, mods_path):
@@ -178,7 +179,7 @@ class OverridesManager(object):
 
     def process_overrides_and_write_config(self):
         if not cfg.CleanOverrides:
-            print("== Skipping cleanup of ModClassOverrides due to configuration (CleanOverrides is False)")
+            print("\n==== Skipping cleanup of ModClassOverrides due to configuration (CleanOverrides is False)")
             return
 
         if self._determine_if_changes_needed():
@@ -202,5 +203,10 @@ class OverridesManager(object):
 
     def process_mod_options(self):
         if cfg.CleanActiveMods:
-            print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
-            self.xcmo.repair_active_mods()
+            if cfg.CleanXComModOptions:
+                print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
+                self.xcmo.repair_active_mods()
+
+            if cfg.CleanDefaultModOptions:
+                print("\n==== Doing cleanup of 'DefaultModOptions.ini' in XCOM2 folder ('%s')" % XCOM2_GAME_PATH)
+                self.dmo.repair_active_mods()
