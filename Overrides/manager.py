@@ -2,21 +2,31 @@ import os
 
 from Overrides import cfg
 from Overrides.constants import XCE_FILE_NAME, XCMO_FILE_NAME
-from Overrides.ini_handler import XComEngineIniHandler, XComModOptionsIniHandler
+from Overrides.ini import XComEngineIniHandler, XComModOptionsIniHandler
 from Overrides.text_processor import IniTextProcessor
+from Overrides.utils import get_input
 
 XCOM2_CONF_PATH = XComEngineIniHandler.get_platform_specific_config_path()
 XCE_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCE_FILE_NAME
 XCMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + XCMO_FILE_NAME
+# DMO_FILE_PATH = os.path.expanduser('~') + XCOM2_CONF_PATH + DMO_FILE_NAME  # GameDir, not VFS
 
 # TODO Move this
 print("Debug: XComEngine.ini absolute path: '%s'" % XCE_FILE_PATH)
 print("Configuration: ")
+print(":: UseUI: %s " % cfg.UseUI)
 print(":: WOTC: %s " % cfg.WOTC)
 print(":: DryRun: %s " % cfg.DryRun)
 print(":: Path_XCOM2Mods: %s " % cfg.mod_paths['XCOM2Mods'])
 print(":: Path_WOTCMods: %s " % cfg.mod_paths['WOTCMods'])
 print(":: Path_SteamMods: %s " % cfg.mod_paths['SteamMods'])
+
+print(":: XComModOptions settings:")
+# print(":: IncludeMods: %s " % cfg.IncludeMods)
+print(":: ExcludeMods: %s " % cfg.ExcludeMods)
+print(":: :: CleanActiveMods: %s " % cfg.CleanActiveMods)
+print(":: :: CleanDefaultModOptions: %s " % cfg.CleanDefaultModOptions)
+print(":: :: CleanXComModOptions: %s " % cfg.CleanXComModOptions)
 
 print(":: ModClassOverrides settings:")
 print(":: :: CleanOverrides: %s" % cfg.CleanOverrides)
@@ -24,15 +34,11 @@ print(":: :: IncludeOverrides: %s" % cfg.IncludeOverrides)
 print(":: :: ExcludeOverrides: %s" % cfg.ExcludeOverrides)
 print(":: :: PromptForEach: %s" % cfg.PromptForEach)
 
-print(":: XComModOptions settings:")
-print(":: :: CleanActiveMods: %s " % cfg.CleanActiveMods)
-print(":: :: CleanDefaultModOptions: %s " % cfg.CleanDefaultModOptions)
-print(":: :: CleanXComModOptions: %s " % cfg.CleanXComModOptions)
-
 
 class OverridesManager(object):
-    xce = XComEngineIniHandler(XCE_FILE_PATH)
     xcmo = XComModOptionsIniHandler(XCMO_FILE_PATH)
+    # dmo = XComModOptionsIniHandler(DMO_FILE_PATH)
+    xce = XComEngineIniHandler(XCE_FILE_PATH)
     overrides_dict = {}
     found_overrides = []
     previous_overrides = []
@@ -55,8 +61,8 @@ class OverridesManager(object):
                     engine_ini_paths.append(file_path)
 
         print("%s 'XComEngine.ini' files found in mods path: '%s'" % (len(engine_ini_paths), mods_path))
-        for p in engine_ini_paths:
-            print("Path: %s" % p)
+        # for p in engine_ini_paths:
+        #    print("Path: %s" % p)
         return engine_ini_paths
 
     def _get_existing_overrides(self):
@@ -141,7 +147,7 @@ class OverridesManager(object):
             return
 
         if self._determine_if_changes_needed():
-            print("==== Changes needed - Proceeding")
+            print("\n\n==== Changes needed - Proceeding")
 
             print("== Updating overrides in 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
             text = self.xce.get_text()
@@ -157,9 +163,9 @@ class OverridesManager(object):
             self.xce.write_text(clean_text)
 
         else:
-            print("==== No Changes needed - Not modifying XComEngine.ini!")
+            print("\n\n==== No ModClassOverrides Changes needed - Not modifying XComEngine.ini!")
 
     def process_mod_options(self):
         if cfg.CleanActiveMods:
-            print("== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
+            print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
             self.xcmo.repair_active_mods()

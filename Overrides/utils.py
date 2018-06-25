@@ -2,7 +2,18 @@ import datetime
 import os
 import sys
 
+from Overrides import cfg
 from Overrides.constants import LOG_FILE_NAME, MAX_LOG_SIZE
+
+
+def get_input(*args, **kwargs):
+    if not cfg.UseUI:
+        return input(*args)
+    else:
+        # TODO: Hook into UI here to raise a dialog or similar if needed
+        print("Skipping prompt due to UI Enabled")
+        print(*args, **kwargs)
+        return ""
 
 
 class SplitOut(object):

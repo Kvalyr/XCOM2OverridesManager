@@ -38,7 +38,7 @@ class ModClassOverride(object):
 
     @classmethod
     def from_raw_line(cls, raw_line, source_file):
-        print("== Parsing Override: %s -- File: %s" % (raw_line, source_file))
+        print("\n\n== Parsing Override: %s -- File: %s" % (raw_line, source_file))
         base_class = re.search(re_mco_baseclass, raw_line).groups(0)[0]
         mod_class = re.search(re_mco_modclass, raw_line).groups(0)[0]
         return cls(base_class, mod_class, source_file)
