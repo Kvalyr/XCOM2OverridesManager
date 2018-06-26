@@ -16,21 +16,26 @@ class BaseIniHandler(object):
         with open(self.file_path, "r") as input_file:
             return input_file.readlines()
 
-    def write_text(self, new_text):
-        self.backup()
+    def write_text(self, new_text, reason=""):
+        self.backup(reason=reason)
         if cfg.DryRun:
             print(
                 "== Would write changes but dry_run mode is enabled. "
                 "Set DryRun = False in config.ini to allow writing changes."
                 "\nFile: %s\n" % self.file_path
             )
-        else:
-            with open(self.file_path, "w") as output_file:
-                print("== Writing changes to ini file in user config folder: '%s'" % self.file_path)
-                return output_file.write(new_text)
+            return
 
-    def backup(self):
-        bak_path = self.file_path + ".bak"
+        with open(self.file_path, "w") as output_file:
+            print("== Writing changes to ini file: '%s'" % self.file_path)
+            return output_file.write(new_text)
+
+    def backup(self, reason=""):
+        if reason:
+            bak_path = self.file_path + "_" + reason + ".bak"
+        else:
+            bak_path = self.file_path + ".bak"
+
         if cfg.DryRun:
             print(
                 "== Would backup file but dry_run mode is enabled. "
