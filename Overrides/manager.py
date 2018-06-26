@@ -208,12 +208,15 @@ class OverridesManager(object):
         else:
             print("\n\n==== No ModClassOverrides Changes needed - Not modifying XComEngine.ini!")
 
+        self.xce.remove_ini_version()
     def process_mod_options(self):
         if cfg.CleanActiveMods:
             if cfg.CleanXComModOptions:
                 print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
                 self.xcmo.repair_active_mods()
+                self.xcmo.remove_ini_version()
 
             if cfg.CleanDefaultModOptions:
                 print("\n==== Doing cleanup of 'DefaultModOptions.ini' in XCOM2 folder ('%s')" % XCOM2_GAME_PATH)
                 self.dmo.repair_active_mods()
+                self.dmo.remove_ini_version()

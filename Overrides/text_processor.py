@@ -28,6 +28,16 @@ class IniTextProcessor(object):
         return re.sub(re_mco_ml, "\n[", config_text)
 
     @classmethod
+    def replace_old_overrides(cls, config_text, overrides_list):
+        # overrides_text = '\n' + '\n'.join([str(o) for o in overrides_list])
+        overrides_text = '\n'.join([str(o) for o in overrides_list])
+
+        any_mco = re.search(re_mco, config_text)
+        if any_mco:
+            return re.sub(re_mco_ml, overrides_text + "\n\n[", config_text)
+        return re.sub(re_xce_engine, r'\1' + overrides_text + "\n" + r'\2\3', config_text)
+
+    @classmethod
     def repair_config_text(cls, config_text):
         # Cleanups
         # Multiple blank lines
@@ -51,11 +61,18 @@ class IniTextProcessor(object):
         return '\n'.join(repaired_lines)
 
     @classmethod
-    def replace_old_overrides(cls, config_text, overrides_list):
-        # overrides_text = '\n' + '\n'.join([str(o) for o in overrides_list])
-        overrides_text = '\n'.join([str(o) for o in overrides_list])
+    def remove_ini_version(cls, text):
+        # These regexes could probably be combined instead of doing fallback from one to another but Python logic is
+        # more readable than inscrutable regex patterns
+        match_to_use = cls.get_regex_for_ini_section("IniVersion")
+        section_match = re.search(match_to_use, text)
 
-        any_mco = re.search(re_mco, config_text)
-        if any_mco:
-            return re.sub(re_mco_ml, overrides_text + "\n\n[", config_text)
-        return re.sub(re_xce_engine, r'\1' + overrides_text + "\n" + r'\2\3', config_text)
+        repl = ""  # If there's nothing after [IniVersion], just wipe it out until EOF
+        if not section_match:
+            # If there's no section after [IniVersion] then just match to EOF
+            match_to_use = cls.get_regex_for_ini_section("IniVersion", until_eof=True)
+        else:
+            repl = section_match.groups()[1]  # Reattach the stuff that came after. (2nd match group)
+
+        new_text = re.sub(match_to_use, repl, text)
+        return new_text

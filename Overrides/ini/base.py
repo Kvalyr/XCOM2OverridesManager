@@ -2,6 +2,7 @@ import re
 import shutil
 
 from Overrides import cfg
+from Overrides.text_processor import IniTextProcessor
 
 
 class BaseIniHandler(object):
@@ -76,3 +77,14 @@ class BaseIniHandler(object):
         else:
             raise NotImplementedError("Unrecognized system OS/Platform")
         return path
+
+    def remove_ini_version(self):
+        if not cfg.RemoveIniVersion:
+            print(
+                "\n==== Skipping cleanup of [IniVersion] in %s due to configuration (RemoveIniVersion is False)"
+                % self.file_path
+            )
+        print("\n==== Removing [IniVersion] section from '%s'" % self.file_path)
+        new_text = self.get_text_from_file()
+        new_text = IniTextProcessor.remove_ini_version(new_text)
+        self.write_text(new_text, reason="IniVersion")

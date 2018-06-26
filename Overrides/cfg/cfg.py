@@ -60,7 +60,9 @@ XCOM2Dir = inicfg.get(CFG_SECTION, "XCOM2Dir", fallback=CFG_DEFAULT_XCOM2Dir)
 Path_XCOM2Mods = inicfg.get(CFG_SECTION, "XCOM2Mods", fallback=CFG_DEFAULT_XCOM2Mods)
 Path_WOTCMods = inicfg.get(CFG_SECTION, "WOTCMods", fallback=CFG_DEFAULT_WOTCMods)
 Path_SteamMods = inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods)
+
 FixModPaths = inicfg.getboolean(CFG_SECTION, "FixModPaths", fallback=True)
+RemoveIniVersion = inicfg.getboolean(CFG_SECTION, "RemoveIniVersion", fallback=True)
 
 
 # TODO: Read these paths from XCE?
