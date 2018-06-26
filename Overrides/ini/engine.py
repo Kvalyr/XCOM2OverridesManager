@@ -3,6 +3,7 @@ import re
 from Overrides import cfg
 from Overrides.constants import re_mco_add
 from Overrides.mco import ModClassOverride
+from Overrides.text_processor import IniTextProcessor
 
 from .base import BaseIniHandler
 
@@ -34,26 +35,23 @@ class XComEngineIniHandler(BaseIniHandler):
                 overrides.append(ModClassOverride.from_raw_line(line.rstrip(), source_file=file_path))
         return overrides
 
-    @staticmethod
-    def repair_mod_paths(text):
+    def repair_mod_paths(self):
+        if not cfg.FixModPaths:
+            print(
+                "\n==== Skipping cleanup of Mod paths in %s due to configuration (FixModPaths is False)"
+                % self.file_path
+            )
         # These regexes could probably be combined instead of doing fallback from one to another but Python logic is
         # more readable than inscrutable regex patterns
-
-        re_dlc_enum_until_section = re.compile(
-            r'(\[Engine\.DownloadableContentEnumerator\][\s\S]+?)(\[.+?\])',  # 1:(DLCE section)2:(next section label)
-            flags=re.MULTILINE
-        )
-        match_to_use = re_dlc_enum_until_section
+        text = self.get_text_from_file()
+        section_name = "Engine\.DownloadableContentEnumerator"
+        match_to_use = IniTextProcessor.get_regex_for_ini_section(section_name)
         section_match = re.search(match_to_use, text)
 
         after_dlce = ""
         if not section_match:
             # If there's no section after [Engine.DownloadableContentEnumerator] then just match to EOF
-            re_dlc_enum_until_EOF = re.compile(
-                r'(\[Engine\.DownloadableContentEnumerator\][\s\S]*)$',
-                flags=re.MULTILINE
-            )
-            match_to_use = re_dlc_enum_until_EOF
+            match_to_use = IniTextProcessor.get_regex_for_ini_section(section_name, until_eof=True)
         else:
             after_dlce = section_match.groups()[1]  # Reattach the stuff that came after this section (2nd match group)
 
@@ -67,4 +65,4 @@ class XComEngineIniHandler(BaseIniHandler):
 
         # Lambda for repl so that re.sub doesn't try to parse the slashes in Windows paths as escapes in the string
         new_text = re.sub(match_to_use, lambda x: repl, text)
-        return new_text
+        self.write_text(new_text, reason="FixModPaths")

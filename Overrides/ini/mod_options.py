@@ -4,6 +4,7 @@ import re
 
 from Overrides import cfg
 from Overrides.constants import DMO_FILE_NAME
+from Overrides.text_processor import IniTextProcessor
 
 from .base import BaseIniHandler
 
@@ -69,7 +70,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
     def repair_active_mods(self):
         if not self.ready:
             return
-        re_xmo = re.compile(r'\[Engine.XComModOptions\][\s\S]*', flags=re.MULTILINE)
+        re_xmo = IniTextProcessor.get_regex_for_ini_section("Engine\.XComModOptions", until_eof=True)
         config_text = self.get_text_from_file()
         mod_lines = []
 
@@ -80,7 +81,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
         repl = "[Engine.XComModOptions]\n" + mods_text + "\n\n"
         config_text = re.sub(re_xmo, repl, config_text)
 
-        self.write_text(config_text)
+        self.write_text(config_text, "RepairActiveMods")
 
 
 class DefaultModOptionsIniHandler(XComModOptionsIniHandler):
