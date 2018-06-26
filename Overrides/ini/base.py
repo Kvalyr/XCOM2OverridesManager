@@ -33,7 +33,7 @@ class BaseIniHandler(object):
 
     def backup(self, reason=""):
         if reason:
-            bak_path = self.file_path + "_" + reason + ".bak"
+            bak_path = self.file_path + "_Before" + reason + ".bak"
         else:
             bak_path = self.file_path + ".bak"
 
