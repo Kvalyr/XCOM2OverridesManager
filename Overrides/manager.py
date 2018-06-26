@@ -177,26 +177,33 @@ class OverridesManager(object):
 
         return change_needed
 
-    def process_overrides_and_write_config(self):
-        if not cfg.CleanOverrides:
-            print("\n==== Skipping cleanup of ModClassOverrides due to configuration (CleanOverrides is False)")
-            return
-
-        if self._determine_if_changes_needed():
+    def process_engine(self):
+        # TODO: Clean up this function
+        if self._determine_if_changes_needed() or cfg.FixModPaths:
             print("\n\n==== Changes needed - Proceeding")
-
-            print("== Updating overrides in 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
-            text = self.xce.get_text()
-            if self.found_overrides:
-                clean_text = IniTextProcessor.replace_old_overrides(text, self.found_overrides)
+            new_text = self.xce.get_text()
+            if cfg.CleanOverrides:
+                print("== Updating overrides in 'XComEngine.ini' in user config folder ('%s')" % self.xce.file_path)
+                if self.found_overrides:
+                    new_text = IniTextProcessor.replace_old_overrides(new_text, self.found_overrides)
+                else:
+                    # No new overrides to add, just clean up instead
+                    new_text = IniTextProcessor.clean_out_all_overrides(new_text)
             else:
-                # No new overrides to add, just clean up instead
-                clean_text = IniTextProcessor.clean_out_all_overrides(text)
+                print("\n==== Skipping cleanup of ModClassOverrides due to configuration (CleanOverrides is False)")
 
-            print("== Doing cleanup of 'XComEngine.ini' in user config folder ('%s')" % XCE_FILE_PATH)
-            clean_text = IniTextProcessor.repair_config_text(clean_text)
+            if cfg.FixModPaths:
+                new_text = self.xce.repair_mod_paths(new_text)
+            else:
+                print(
+                    "\n==== Skipping cleanup of Mod paths in %s due to configuration (FixModPaths is False)"
+                    % self.xce.file_path
+                )
 
-            self.xce.write_text(clean_text)
+            print("== Doing cleanup of 'XComEngine.ini' in user config folder ('%s')" % self.xce.file_path)
+            new_text = IniTextProcessor.repair_config_text(new_text)
+
+            self.xce.write_text(new_text)
 
         else:
             print("\n\n==== No ModClassOverrides Changes needed - Not modifying XComEngine.ini!")

@@ -9,7 +9,9 @@ from .cfg import IncludeOverrides, ExcludeOverrides
 from .cfg import CleanActiveMods, CleanXComModOptions, CleanDefaultModOptions
 from .cfg import XCOM2Dir
 from .cfg import mod_paths
+from .cfg import FixModPaths
 from .cfg import Platform, IS_WINDOWS, IS_MACOS, IS_LINUX
+
 
 __all__ = [
     'UseUI',
@@ -26,6 +28,7 @@ __all__ = [
     'CleanDefaultModOptions',
     'XCOM2Dir',
     'mod_paths',
+    'FixModPaths',
     'Platform',
     'IS_WINDOWS',
     'IS_MACOS',
