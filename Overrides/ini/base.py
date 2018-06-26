@@ -84,6 +84,7 @@ class BaseIniHandler(object):
                 "\n==== Skipping cleanup of [IniVersion] in %s due to configuration (RemoveIniVersion is False)"
                 % self.file_path
             )
+            return
         print("\n==== Removing [IniVersion] section from '%s'" % self.file_path)
         new_text = self.get_text_from_file()
         new_text = IniTextProcessor.remove_ini_version(new_text)

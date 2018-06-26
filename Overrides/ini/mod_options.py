@@ -75,7 +75,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
         mod_lines = []
 
         for mod in self.active_mods:
-            mod_lines.append("ActiveMods=\"%s\"" % mod)
+            mod_lines.append("ActiveMods=%s" % mod)
 
         mods_text = '\n'.join(mod_lines)
         repl = "[Engine.XComModOptions]\n" + mods_text + "\n\n"
