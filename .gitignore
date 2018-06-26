@@ -7,3 +7,4 @@ XComEngine.ini.bak
 dist/
 build/
 *.spec
+.virtualenv
