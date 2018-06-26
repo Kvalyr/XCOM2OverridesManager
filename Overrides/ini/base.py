@@ -88,3 +88,9 @@ class BaseIniHandler(object):
         new_text = self.get_text_from_file()
         new_text = IniTextProcessor.remove_ini_version(new_text)
         self.write_text(new_text, reason="IniVersion")
+
+    def repair(self):
+        print("\n==== Doing cleanup of '%s'" % self.file_path)
+        new_text = self.get_text_from_file()
+        new_text = IniTextProcessor.repair_config_text(new_text)
+        self.write_text(new_text, reason="Repair")

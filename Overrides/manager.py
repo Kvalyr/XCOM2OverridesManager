@@ -179,7 +179,7 @@ class OverridesManager(object):
 
     def process_engine(self):
         # TODO: Clean up this function
-        if self._determine_if_changes_needed() or cfg.FixModPaths:
+        if self._determine_if_changes_needed():
             print("\n\n==== Changes needed - Proceeding")
             new_text = self.xce.get_text_from_file()
             if cfg.CleanOverrides:
@@ -189,34 +189,29 @@ class OverridesManager(object):
                 else:
                     # No new overrides to add, just clean up instead
                     new_text = IniTextProcessor.clean_out_all_overrides(new_text)
+
+                self.xce.write_text(new_text, "ModClassOverrides")
             else:
                 print("\n==== Skipping cleanup of ModClassOverrides due to configuration (CleanOverrides is False)")
-
-            if cfg.FixModPaths:
-                new_text = self.xce.repair_mod_paths(new_text)
-            else:
-                print(
-                    "\n==== Skipping cleanup of Mod paths in %s due to configuration (FixModPaths is False)"
-                    % self.xce.file_path
-                )
-
-            print("== Doing cleanup of 'XComEngine.ini' in user config folder ('%s')" % self.xce.file_path)
-            new_text = IniTextProcessor.repair_config_text(new_text)
-
-            self.xce.write_text(new_text)
-
         else:
             print("\n\n==== No ModClassOverrides Changes needed - Not modifying XComEngine.ini!")
 
+        self.xce.repair_mod_paths()
+
+        # TODO: This should probably be done to all files in Config, not just XCE / XCMO / DMO, etc
         self.xce.remove_ini_version()
+        self.xce.repair()
+
     def process_mod_options(self):
         if cfg.CleanActiveMods:
             if cfg.CleanXComModOptions:
-                print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % XCE_FILE_PATH)
+                print("\n==== Doing cleanup of 'XComModOptions.ini' in user config folder ('%s')" % self.xcmo.file_path)
                 self.xcmo.repair_active_mods()
                 self.xcmo.remove_ini_version()
+                self.xcmo.repair()
 
             if cfg.CleanDefaultModOptions:
-                print("\n==== Doing cleanup of 'DefaultModOptions.ini' in XCOM2 folder ('%s')" % XCOM2_GAME_PATH)
+                print("\n==== Doing cleanup of 'DefaultModOptions.ini' in XCOM2 folder ('%s')" % self.dmo.file_path)
                 self.dmo.repair_active_mods()
                 self.dmo.remove_ini_version()
+                self.dmo.repair()
