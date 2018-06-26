@@ -181,7 +181,7 @@ class OverridesManager(object):
         # TODO: Clean up this function
         if self._determine_if_changes_needed() or cfg.FixModPaths:
             print("\n\n==== Changes needed - Proceeding")
-            new_text = self.xce.get_text()
+            new_text = self.xce.get_text_from_file()
             if cfg.CleanOverrides:
                 print("== Updating overrides in 'XComEngine.ini' in user config folder ('%s')" % self.xce.file_path)
                 if self.found_overrides:

@@ -21,7 +21,7 @@ class XComEngineIniHandler(BaseIniHandler):
     def get_overrides_from_file(cls, file_path):
         # print("==== Getting overrides from file: %s" % file_path)
         ini_file = XComEngineIniHandler(file_path)
-        ini_lines = ini_file.get_lines()
+        ini_lines = ini_file.get_lines_from_file()
 
         overrides = []
         for line in ini_lines:

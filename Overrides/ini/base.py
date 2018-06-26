@@ -1,21 +1,18 @@
-import platform
 import re
 import shutil
 
 from Overrides import cfg
-from Overrides.constants import re_mco_add
-from Overrides.mco import ModClassOverride
 
 
 class BaseIniHandler(object):
     def __init__(self, file_path=None):
         self.file_path = file_path
 
-    def get_text(self):
+    def get_text_from_file(self):
         with open(self.file_path, "r") as input_file:
             return input_file.read()
 
-    def get_lines(self):
+    def get_lines_from_file(self):
         with open(self.file_path, "r") as input_file:
             return input_file.readlines()
 

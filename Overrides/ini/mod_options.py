@@ -37,7 +37,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
             self.active_mods.append(mod_name)
 
     def _parse_active_mods(self):
-        lines = self.get_lines()
+        lines = self.get_lines_from_file()
         num_mods_found = 0
         if not lines[0].strip().startswith("[Engine.XComModOptions]"):
             raise ValueError(
@@ -69,7 +69,7 @@ class XComModOptionsIniHandler(BaseIniHandler):
         if not self.ready:
             return
         re_xmo = re.compile(r'\[Engine.XComModOptions\][\s\S]*', flags=re.MULTILINE)
-        config_text = self.get_text()
+        config_text = self.get_text_from_file()
         mod_lines = []
 
         for mod in self.active_mods:
