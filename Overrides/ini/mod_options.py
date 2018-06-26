@@ -40,9 +40,9 @@ class XComModOptionsIniHandler(BaseIniHandler):
         lines = self.get_lines_from_file()
         num_mods_found = 0
         if not lines[0].strip().startswith("[Engine.XComModOptions]"):
-            raise ValueError(
-                "Invalid %s !\nExpected %s, got: %s" % (self.file_path, "[Engine.XComModOptions]", lines[0])
-            )
+            print("Error: Invalid %s !\nExpected %s, got: %s" % (self.file_path, "[Engine.XComModOptions]", lines[0]))
+            return
+
         line_counter = 0
         for line in lines:
             line_counter += 1
@@ -55,7 +55,8 @@ class XComModOptionsIniHandler(BaseIniHandler):
 
             parts = line.split("=")
             if len(parts) < 2:
-                raise ValueError("Invalid XComModOptions.ini! Problem on line %s : %s" % (line_counter, line))
+                print("Error: Invalid XComModOptions.ini! Problem on line %s : %s" % (line_counter, line))
+                return
 
             num_mods_found += 1
             mod_name = parts[1].strip('\"')
