@@ -49,10 +49,10 @@ class BaseIniHandler(object):
         wotc = cfg.WOTC
         xcom_vfs_dir_name = "XCOM2 War of the Chosen" if wotc else "XCOM2"
 
-        if platform.system() == "Windows":
+        if cfg.IS_WINDOWS:
             path = "\Documents\my games\%s\XComGame\Config\\" % xcom_vfs_dir_name
 
-        elif platform.system() == "Darwin":
+        elif cfg.IS_MACOS:
             # TODO: Uncertain about these paths
             xcom_product_dir_name = "XCOM 2"
             if wotc:
@@ -62,7 +62,7 @@ class BaseIniHandler(object):
                 xcom_product_dir_name, xcom_vfs_dir_name
             )
 
-        elif platform.system() == "Linux":
+        elif cfg.IS_LINUX:
             # TODO: Uncertain about these paths
             xcom_product_dir_name = "XCOM 2"
             if wotc:

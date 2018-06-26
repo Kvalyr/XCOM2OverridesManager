@@ -1,4 +1,5 @@
 import configparser
+import platform
 import os
 import re
 
@@ -94,3 +95,8 @@ ExcludeOverrides_str = inicfg.get("Overrides", "ExcludeOverrides", fallback=[])
 PromptForEach = inicfg.getboolean("Overrides", "PromptForEach", fallback=True)
 IncludeOverrides = _parse_overrides_filter(IncludeOverrides_str)
 ExcludeOverrides = _parse_overrides_filter(ExcludeOverrides_str)
+
+Platform = platform.system()
+IS_WINDOWS = Platform == "Windows"
+IS_MACOS = Platform == "Darwin"
+IS_LINUX = Platform == "Linux"
