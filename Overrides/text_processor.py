@@ -5,6 +5,16 @@ from Overrides.constants import re_mco_ml, re_xce_engine, re_mco
 class IniTextProcessor(object):
 
     @classmethod
+    def get_regex_for_ini_section(cls, ini_section_label, until_eof=False):
+        pattern = r'(\[' + ini_section_label + '\][\s\S]'
+
+        if until_eof:
+            pattern += r'*)$'  # '[\s\S]*$' is "everything until EOF" when doing multiline
+        else:
+            pattern += r'+?)(\[.+?\])'  # 1:(SECTION_LABEL)2:(next section)
+        return re.compile(pattern, flags=re.MULTILINE)
+
+    @classmethod
     def get_existing_overrides(cls, config_text):
         match = re.search(re_mco_ml, config_text)
         if match:
