@@ -37,6 +37,9 @@ This tool is intended to be paired with the community launcher, but can be used 
   * Change `WOTC` to `False` in `config.ini` if you are playing vanilla XCOM2 without WotC.
   * Change `CleanActiveMods` to `False` in `config.ini` if you don't want the tool to clean up duplicate entries in XComModOptions.ini
   * Change `CleanOVerrides` to `False` in `config.ini` if you don't want the tool to process ModClassOverrides in XComEngine.ini
+  * Change `FixModPaths` to `False` in `config.ini` if you don't want the tool to clean up the Mod paths in `XComEngine.ini`
+  * Change `RemoveIniVersion` to `True` if you want the tool to remove `[IniVersion]` sections from files it processes. (*Experimental*)
+
   * Change `DryRun` to `True` in `config.ini` if you want to run the tool and observe it **would** do without making any file changes.
   * See `config.ini` for more options.
 
