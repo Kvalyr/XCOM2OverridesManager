@@ -30,6 +30,10 @@ class SplitOut(object):
         pass
 
 
+# ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+# Logging init below
+# ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+
 # Don't let the log file grow. Some kind of FIFO or log-rotation would be good, but not worth the added complexity.
 try:
     log_size = os.path.getsize(os.path.abspath(LOG_FILE_NAME))
