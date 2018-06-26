@@ -8,15 +8,6 @@ from Overrides.text_processor import IniTextProcessor
 from .base import BaseIniHandler
 
 
-def _fix_path_ending(path):
-    if not path:
-        return
-    path_ending = "\\" if cfg.IS_WINDOWS else "/"
-    if not path.endswith(path_ending):
-        return path + path_ending
-    return path
-
-
 class XComEngineIniHandler(BaseIniHandler):
     @classmethod
     def get_overrides_from_file(cls, file_path):
@@ -59,7 +50,6 @@ class XComEngineIniHandler(BaseIniHandler):
         for path_name, path in cfg.mod_paths.items():
             if not path:
                 continue
-            path = _fix_path_ending(path)
             repl += "ModRootDirs=%s\n" % path
         repl += "\n" + after_dlce
 

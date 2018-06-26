@@ -12,9 +12,23 @@ CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_DryRun = 'False'
 
 CFG_DEFAULT_XCOM2Dir = 'C:\Program Files\Steam\steamapps\common\XCOM 2\\'
-CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods'
-CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods'
-CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500'
+CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods\\'
+CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods\\'
+CFG_DEFAULT_SteamMods = 'C:\Program Files\Steam\steamapps\workshop\content\\268500\\'
+
+Platform = platform.system()
+IS_WINDOWS = Platform == "Windows"
+IS_MACOS = Platform == "Darwin"
+IS_LINUX = Platform == "Linux"
+
+
+def _fix_path_ending(path):
+    if not path:
+        return
+    path_ending = "\\" if IS_WINDOWS else "/"
+    if not path.endswith(path_ending):
+        return path + path_ending
+    return path
 
 
 def _parse_list_from_ini_string(string_from_ini):
@@ -56,10 +70,10 @@ UseUI = inicfg.getboolean(CFG_SECTION, "UseUI", fallback=CFG_DEFAULT_WOTC)
 WOTC = inicfg.getboolean(CFG_SECTION, "WOTC", fallback=CFG_DEFAULT_WOTC)
 DryRun = inicfg.getboolean(CFG_SECTION, "DryRun", fallback=CFG_DEFAULT_DryRun)
 
-XCOM2Dir = inicfg.get(CFG_SECTION, "XCOM2Dir", fallback=CFG_DEFAULT_XCOM2Dir)
-Path_XCOM2Mods = inicfg.get(CFG_SECTION, "XCOM2Mods", fallback=CFG_DEFAULT_XCOM2Mods)
-Path_WOTCMods = inicfg.get(CFG_SECTION, "WOTCMods", fallback=CFG_DEFAULT_WOTCMods)
-Path_SteamMods = inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods)
+XCOM2Dir = _fix_path_ending(inicfg.get(CFG_SECTION, "XCOM2Dir", fallback=CFG_DEFAULT_XCOM2Dir))
+Path_XCOM2Mods = _fix_path_ending(inicfg.get(CFG_SECTION, "XCOM2Mods", fallback=CFG_DEFAULT_XCOM2Mods))
+Path_WOTCMods = _fix_path_ending(inicfg.get(CFG_SECTION, "WOTCMods", fallback=CFG_DEFAULT_WOTCMods))
+Path_SteamMods = _fix_path_ending(inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods))
 
 FixModPaths = inicfg.getboolean(CFG_SECTION, "FixModPaths", fallback=True)
 RemoveIniVersion = inicfg.getboolean(CFG_SECTION, "RemoveIniVersion", fallback=True)
@@ -99,8 +113,3 @@ ExcludeOverrides_str = inicfg.get("Overrides", "ExcludeOverrides", fallback=[])
 PromptForEach = inicfg.getboolean("Overrides", "PromptForEach", fallback=True)
 IncludeOverrides = _parse_overrides_filter(IncludeOverrides_str)
 ExcludeOverrides = _parse_overrides_filter(ExcludeOverrides_str)
-
-Platform = platform.system()
-IS_WINDOWS = Platform == "Windows"
-IS_MACOS = Platform == "Darwin"
-IS_LINUX = Platform == "Linux"
