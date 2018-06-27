@@ -8,14 +8,10 @@ from Overrides.overrides import OverridesManager
 
 
 XCOM2_GAME_PATH = cfg.XCOM2Dir
-XCOM2_BASE_VFS_PATH = os.path.expanduser('~')  # TODO: Don't assume VFS/Libraries are in user dir
+XCOM2_BASE_VFS_PATH = cfg.Path_VFSBase
 XCOM2_VFS_PATH = XComEngineIniHandler.get_platform_specific_config_path(XCOM2_BASE_VFS_PATH)
 XCE_FILE_PATH = XCOM2_VFS_PATH + XCE_FILE_NAME
 XCMO_FILE_PATH = XCOM2_VFS_PATH + XCMO_FILE_NAME
-
-# TODO Move this
-
-
 
 
 class XCOM2Tool(object):

@@ -11,6 +11,7 @@ CFG_DEFAULT_UI = 'False'
 CFG_DEFAULT_WOTC = 'True'
 CFG_DEFAULT_DryRun = 'False'
 
+CFG_DEFAULT_BASE_VFS_PATH = os.path.expanduser('~')
 CFG_DEFAULT_XCOM2Dir = 'C:\Program Files\Steam\steamapps\common\XCOM 2\\'
 CFG_DEFAULT_XCOM2Mods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XComGame\Mods\\'
 CFG_DEFAULT_WOTCMods = 'C:\Program Files\Steam\steamapps\common\XCOM 2\XCom2 - WarOfTheChosen\XComGame\Mods\\'
@@ -71,6 +72,7 @@ WOTC = inicfg.getboolean(CFG_SECTION, "WOTC", fallback=CFG_DEFAULT_WOTC)
 DryRun = inicfg.getboolean(CFG_SECTION, "DryRun", fallback=CFG_DEFAULT_DryRun)
 
 XCOM2Dir = _fix_path_ending(inicfg.get(CFG_SECTION, "XCOM2Dir", fallback=CFG_DEFAULT_XCOM2Dir))
+Path_VFSBase = _fix_path_ending(inicfg.get(CFG_SECTION, "Path_VFSBase", fallback=CFG_DEFAULT_BASE_VFS_PATH))
 Path_XCOM2Mods = _fix_path_ending(inicfg.get(CFG_SECTION, "XCOM2Mods", fallback=CFG_DEFAULT_XCOM2Mods))
 Path_WOTCMods = _fix_path_ending(inicfg.get(CFG_SECTION, "WOTCMods", fallback=CFG_DEFAULT_WOTCMods))
 Path_SteamMods = _fix_path_ending(inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods))

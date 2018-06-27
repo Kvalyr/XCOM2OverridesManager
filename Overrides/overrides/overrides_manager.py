@@ -34,8 +34,6 @@ class OverridesManager(object):
     def _should_add_override(self, override):
         source_mod_name = override.source_mod_name
 
-        print(self.xcmo.active_mods)
-
         # Check Include/Exclude Mods
         if source_mod_name is None or source_mod_name not in self.xcmo.active_mods:
             reason = "inactive" if source_mod_name not in cfg.ExcludeMods else "excluded"
