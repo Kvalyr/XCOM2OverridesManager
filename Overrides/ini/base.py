@@ -1,4 +1,3 @@
-import re
 import shutil
 
 from Overrides import cfg
@@ -48,7 +47,7 @@ class BaseIniHandler(object):
             shutil.copy(self.file_path, bak_path)
 
     @classmethod
-    def get_platform_specific_config_path(cls):
+    def get_platform_specific_config_path(cls, user_path):
         wotc = cfg.WOTC
         xcom_vfs_dir_name = "XCOM2 War of the Chosen" if wotc else "XCOM2"
 
@@ -76,7 +75,7 @@ class BaseIniHandler(object):
             )
         else:
             raise NotImplementedError("Unrecognized system OS/Platform")
-        return path
+        return user_path + path
 
     def remove_ini_version(self):
         if not cfg.RemoveIniVersion:

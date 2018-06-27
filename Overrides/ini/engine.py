@@ -2,7 +2,7 @@ import re
 
 from Overrides import cfg
 from Overrides.constants import re_mco_add
-from Overrides.mco import ModClassOverride
+from Overrides.overrides import ModClassOverride
 from Overrides.text_processor import IniTextProcessor
 
 from .base import BaseIniHandler
@@ -32,6 +32,7 @@ class XComEngineIniHandler(BaseIniHandler):
                 "\n==== Skipping cleanup of Mod paths in %s due to configuration (FixModPaths is False)"
                 % self.file_path
             )
+        print("\n==== Repairing mod paths (ModRootDirs) in '%s'" % self.file_path)
         # These regexes could probably be combined instead of doing fallback from one to another but Python logic is
         # more readable than inscrutable regex patterns
         text = self.get_text_from_file()

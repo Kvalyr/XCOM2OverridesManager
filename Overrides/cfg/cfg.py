@@ -76,7 +76,8 @@ Path_WOTCMods = _fix_path_ending(inicfg.get(CFG_SECTION, "WOTCMods", fallback=CF
 Path_SteamMods = _fix_path_ending(inicfg.get(CFG_SECTION, "SteamMods", fallback=CFG_DEFAULT_SteamMods))
 
 FixModPaths = inicfg.getboolean(CFG_SECTION, "FixModPaths", fallback=True)
-RemoveIniVersion = inicfg.getboolean(CFG_SECTION, "RemoveIniVersion", fallback=True)
+RemoveIniVersion = inicfg.getboolean(CFG_SECTION, "RemoveIniVersion", fallback=False)
+RemoveIniVersionAllFiles = inicfg.getboolean(CFG_SECTION, "RemoveIniVersionAllFiles", fallback=False)
 
 
 # TODO: Read these paths from XCE?

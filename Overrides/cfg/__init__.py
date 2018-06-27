@@ -9,7 +9,7 @@ from .cfg import IncludeOverrides, ExcludeOverrides
 from .cfg import CleanActiveMods, CleanXComModOptions, CleanDefaultModOptions
 from .cfg import XCOM2Dir
 from .cfg import mod_paths
-from .cfg import FixModPaths, RemoveIniVersion
+from .cfg import FixModPaths, RemoveIniVersion, RemoveIniVersionAllFiles
 from .cfg import Platform, IS_WINDOWS, IS_MACOS, IS_LINUX
 
 
@@ -30,6 +30,7 @@ __all__ = [
     'mod_paths',
     'FixModPaths',
     'RemoveIniVersion',
+    'RemoveIniVersionAllFiles',
     'Platform',
     'IS_WINDOWS',
     'IS_MACOS',
