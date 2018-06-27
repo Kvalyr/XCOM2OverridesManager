@@ -39,7 +39,7 @@ This tool is intended to be paired with the community launcher, but can be used 
   * Change `CleanOVerrides` to `False` in `config.ini` if you don't want the tool to process ModClassOverrides in XComEngine.ini
   * Change `FixModPaths` to `False` in `config.ini` if you don't want the tool to clean up the Mod paths in `XComEngine.ini`
   * Change `RemoveIniVersion` to `True` if you want the tool to remove `[IniVersion]` sections from files it processes.
-  * Change `RemoveIniVersionAllFiles` to `True` if you want the tool to remove `[IniVersion]` sections from *ALL* ini files in the config folder. 
+  * Change `RemoveIniVersionAllFiles` to `True` if you want the tool to remove `[IniVersion]` sections from *ALL* ini files in the config folder. *NOTE: This discards your settings for graphics, keybinds, etc. but **not** customized mod settings.* This has the same effect as deleting your config folder, with the benefit of leaving inis from mods untouched. 
 
   * Change `DryRun` to `True` in `config.ini` if you want to run the tool and observe it **would** do without making any file changes.
   * See `config.ini` for more options.
